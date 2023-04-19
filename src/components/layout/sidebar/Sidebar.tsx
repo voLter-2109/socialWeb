@@ -1,21 +1,33 @@
 import React from "react";
-import Box from "@mui/material/Box";
 import UserItems from "./UserItems";
+import { List } from "@mui/material";
+import MenuItems from "./MenuItems";
 
 const Sidebar: React.FC = () => {
   return (
-    <Box
-      style={{ border: "1px solid red" }}
+    <>
+    <List
       sx={{
-        display: "flex",
+        width: "100%",
+        bgcolor: "background.paper",
         alignItems: "center",
-        gap: "10px",
-        flexDirection: "column",
-        minHeight: "300px",
       }}
     >
       <UserItems />
-    </Box>
+      </List>
+
+     <List
+     sx={{
+       width: "100%",
+       marginTop: 2,
+       backgroundColor: "#f5f4f6",
+       borderRadius: "10px",
+       alignItems: "center",
+     }}
+   >
+      <MenuItems />
+    </List>
+    </>
   );
 };
 
