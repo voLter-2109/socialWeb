@@ -11,16 +11,15 @@ const Layout: React.FC<PropsWithChildren<Props>> = ({ children }) => {
       <Header />
       <Grid
         container
-        spacing={2}
         marginTop={1}
         display="flex"
         justifyContent="center"
         style={{ minHeight: "100vh" }}
       >
-        <Grid item xs={3}>
+        <Grid item xs={2} >
           <Sidebar />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={7} marginLeft={2}>
           {children}
         </Grid>
       </Grid>

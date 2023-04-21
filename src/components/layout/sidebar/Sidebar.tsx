@@ -6,27 +6,30 @@ import MenuItems from "./MenuItems";
 const Sidebar: React.FC = () => {
   return (
     <>
-    <List
-      sx={{
-        width: "100%",
-        bgcolor: "background.paper",
-        alignItems: "center",
-      }}
-    >
-      <UserItems />
+      <List
+        sx={{
+          padding: "0",
+          width: "100%",
+          backgroundColor: "#f5f4f6",
+          alignItems: "center",
+          borderRadius: "10px",
+        }}
+      >
+        <UserItems />
       </List>
 
-     <List
-     sx={{
-       width: "100%",
-       marginTop: 2,
-       backgroundColor: "#f5f4f6",
-       borderRadius: "10px",
-       alignItems: "center",
-     }}
-   >
-      <MenuItems />
-    </List>
+      <List
+        sx={{
+          width: "100%",
+          padding: "0",
+          marginTop: 2,
+          backgroundColor: "#f5f4f6",
+          borderRadius: "10px",
+          alignItems: "center",
+        }}
+      >
+        <MenuItems />
+      </List>
     </>
   );
 };

@@ -22,7 +22,7 @@ const MenuItems: React.FC = () => {
           <ListItem
             disablePadding
             onClick={() => handleClick(item.link)}
-            key={index}
+            key={`ItemMenu-${index}`}
           >
             <ListItemButton>
               <ListItemIcon>

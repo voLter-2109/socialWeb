@@ -7,6 +7,7 @@ import ListItemText from "@mui/material/ListItemText";
 
 import React from "react";
 import { Link } from "react-router-dom";
+import { users } from "./dataUsers";
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   "& .MuiBadge-badge": {
@@ -26,32 +27,16 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
   },
 }));
 
-const users = [
-  {
-    avatar:
-      "https://i.etsystatic.com/26806139/r/il/7fac75/3959495651/il_570xN.3959495651_616z.jpg",
-    name: "John",
-    isNetWorker: true,
-  },
-  {
-    avatar: "https://mpost.io/wp-content/uploads/image-74-7-1024x1024.jpg",
-    name: "Sausan",
-    isNetWorker: false,
-  },
-  {
-    avatar:
-      "https://play-lh.googleusercontent.com/hJGHtbYSQ0nCnoEsK6AGojonjELeAh_Huxg361mVrPmzdwm8Ots-JzEH5488IS2nojI",
-    name: "Alex",
-    isNetWorker: true,
-  },
-];
-
 const UserItems: React.FC = () => {
   return (
     <>
       {users.map((user, item) => {
         return (
-          <Link to="/users" style={{ textDecoration: "none" }} key={item}>
+          <Link
+            to={`/friends/${user.id}`}
+            style={{ textDecoration: "none" }}
+            key={`User-${item}`}
+          >
             <ListItem
               disablePadding
               sx={{
