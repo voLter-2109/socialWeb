@@ -24,6 +24,7 @@ const Post: React.FC = () => {
     const unsub = new Promise((resolve, reject) => {
       onSnapshot(collection(db, "post"), (doc: any) => {
         resolve(doc);
+        console.log("3")
       });
     });
 
