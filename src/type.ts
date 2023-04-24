@@ -29,4 +29,10 @@ export interface IMenuItem {
 export interface IUserData {
   email: string;
   password: string;
+  name: string;
+}
+
+export interface IMessage {
+  user: IUser;
+  message: string;
 }

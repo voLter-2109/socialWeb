@@ -1,41 +1,62 @@
 import { Box, TextField, Alert, AlertTitle } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IUserData } from "../../../type";
 
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useAuth } from "../../providers/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Auth: React.FC = () => {
+  const { ga, user } = useAuth();
+  const navigation = useNavigate();
+
   const [isRegForm, setIsRegForm] = useState<boolean>(false);
   const [errorMes, setErrorMes] = useState<string>("");
   const [userData, setUserData] = useState<IUserData>({
     email: "",
     password: "",
+    name: "",
   } as IUserData);
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const auth = getAuth();
-
     if (isRegForm) {
       try {
-        await createUserWithEmailAndPassword(
-          auth,
+        const res = await createUserWithEmailAndPassword(
+          ga,
           userData.email,
           userData.password
         );
+
+        await updateProfile(res.user, {
+          displayName: userData.name,
+        });
       } catch (error: any) {
         const result = (error as Error).message;
         setErrorMes(result);
       }
     } else {
-      console.log("войти");
+      try {
+        await signInWithEmailAndPassword(ga, userData.email, userData.password);
+      } catch (error: any) {
+        const result = (error as Error).message;
+        setErrorMes(result);
+      }
     }
 
-    setUserData({ email: "", password: "" });
+    setUserData({ email: "", password: "", name: "" });
     console.log(userData.email, userData.password);
   };
+
+  useEffect(() => {
+    if (user) navigation("/");
+  }, [user]);
 
   return (
     <>
@@ -64,9 +85,19 @@ const Auth: React.FC = () => {
           required
           value={userData.password}
           sx={{ width: "50%", marginTop: "10px" }}
-          onChange={(e) =>{
-            setIsRegForm(false)
-            setUserData({ ...userData, password: e.target.value })
+          onChange={(e) => {
+            setIsRegForm(false);
+            setUserData({ ...userData, password: e.target.value });
+          }}
+        />
+        <TextField
+          label="name"
+          variant="outlined"
+          value={userData.name}
+          sx={{ width: "50%", marginTop: "10px" }}
+          onChange={(e) => {
+            setIsRegForm(false);
+            setUserData({ ...userData, name: e.target.value });
           }}
         />
 

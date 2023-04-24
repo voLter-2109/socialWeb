@@ -1,27 +1,30 @@
 import React, { useState } from "react";
-import { Box, TextField } from "@mui/material";
-// import TextField from "@mui/material/TextField";
-import { IPost, TypeSetState } from "../../../type";
-import { users } from "../../layout/sidebar/dataUsers";
+import { Alert, AlertTitle, Box, TextField } from "@mui/material";
+import { useAuth } from "../../providers/useAuth";
+import { collection, addDoc } from "firebase/firestore";
 
-interface IAddPost {
-  setPosts: TypeSetState<IPost[]>;
-}
-
-const AddPost: React.FC<IAddPost> = ({ setPosts }) => {
+const AddPost: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
+  const { user, db, setReload } = useAuth();
+  const [error, setError] = useState("");
 
-  const addPostHandler = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    if (e.key === "Enter") {
+  const addPostHandler = async (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "Enter" && user) {
       e.preventDefault();
-      setPosts((prev) => [
-        {
-          author: users[0],
+
+      try {
+        const docRef = await addDoc(collection(db, "post"), {
+          author: user,
           content: inputValue,
           createAt: String(new Date()),
-        },
-        ...prev,
-      ]);
+        });
+        setReload((prev) => !prev);
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e: any) {
+        const result = (e as Error).message;
+        setError(result);
+      }
+
       setInputValue("");
     }
   };
@@ -50,6 +53,12 @@ const AddPost: React.FC<IAddPost> = ({ setPosts }) => {
         onChange={(e) => onChangeInput(e)}
         value={inputValue}
       />
+      {error && (
+        <Alert severity="error">
+          <AlertTitle>Error</AlertTitle>
+          {error}
+        </Alert>
+      )}
     </Box>
   );
 };

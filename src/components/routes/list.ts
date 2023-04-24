@@ -30,7 +30,7 @@ export const routes = [
   },
 
   {
-    path: "/friends/:id",
+    path: "/friends",
     component: Friends,
     auth: true,
   },

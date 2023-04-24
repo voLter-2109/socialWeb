@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { IPost } from "../../../type";
 import {
   Avatar,
@@ -11,12 +11,24 @@ import {
   ImageListItem,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import { collection, getDocs } from "firebase/firestore";
+import { useAuth } from "../../providers/useAuth";
+import { initialPosts } from "./initialPosts";
 
-interface IPosts {
-  posts: IPost[];
-}
+const Post: React.FC = () => {
+  const [posts, setPosts] = useState<IPost[]>(initialPosts);
+  const { db, reload } = useAuth();
 
-const Post: React.FC<IPosts> = ({ posts }) => {
+  useEffect(() => {
+    const fetching = async () => {
+      const querySnapshot = await getDocs(collection(db, "post"));
+      querySnapshot.forEach((d: any) => {
+        setPosts((prev) => [d.data(), ...prev]);
+      });
+    };
+    fetching();
+  }, [db, reload]);
+
   return (
     <>
       {posts.map((post, i) => {

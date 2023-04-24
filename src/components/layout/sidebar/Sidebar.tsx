@@ -2,6 +2,7 @@ import React from "react";
 import UserItems from "./UserItems";
 import { List } from "@mui/material";
 import MenuItems from "./MenuItems";
+import User from "./User";
 
 const Sidebar: React.FC = () => {
   return (
@@ -10,6 +11,19 @@ const Sidebar: React.FC = () => {
         sx={{
           padding: "0",
           width: "100%",
+          backgroundColor: "#f5f4f6",
+          alignItems: "center",
+          borderRadius: "10px",
+        }}
+      >
+        <User />
+      </List>
+
+      <List
+        sx={{
+          padding: "0",
+          width: "100%",
+          marginTop: 3,
           backgroundColor: "#f5f4f6",
           alignItems: "center",
           borderRadius: "10px",
