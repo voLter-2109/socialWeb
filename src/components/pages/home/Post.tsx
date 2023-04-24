@@ -11,23 +11,40 @@ import {
   ImageListItem,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, onSnapshot, doc } from "firebase/firestore";
 import { useAuth } from "../../providers/useAuth";
 import { initialPosts } from "./initialPosts";
+import { union, sortBy } from "lodash";
 
 const Post: React.FC = () => {
   const [posts, setPosts] = useState<IPost[]>(initialPosts);
   const { db, reload } = useAuth();
-
+  // Promise javacript fetch ?
   useEffect(() => {
-    const fetching = async () => {
-      const querySnapshot = await getDocs(collection(db, "post"));
-      querySnapshot.forEach((d: any) => {
-        setPosts((prev) => [d.data(), ...prev]);
+    const unsub = new Promise((resolve, reject) => {
+      onSnapshot(collection(db, "post"), (doc: any) => {
+        resolve(doc);
       });
+    });
+
+    return () => {
+      unsub
+        .then((res: any) => {
+          console.log("1" + res);
+          const test: any[] = [];
+          res.forEach((post: any) => {
+            test.push(post.data());
+          });
+          return test;
+        })
+        .then((res: any) => {
+          console.log("2" + res);
+          setPosts(() =>
+            sortBy(union([...res, ...posts]), [(item) => item.createAt])
+          );
+        });
     };
-    fetching();
-  }, [db, reload]);
+  }, [db]);
 
   return (
     <>
