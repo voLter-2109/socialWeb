@@ -28,6 +28,7 @@ export const AuthProvider: React.FC<PropsWithChildren<Props>> = ({
   const navigation = useNavigate();
 
   useEffect(() => {
+    console.log(reload);
     const unListen = onAuthStateChanged(ga, (authUser) => {
       if (authUser) {
         setUser({
@@ -35,8 +36,10 @@ export const AuthProvider: React.FC<PropsWithChildren<Props>> = ({
           avatar: users[0].avatar,
           name: authUser.displayName || "no name",
         });
+        navigation("/");
       } else {
         setUser(null);
+
         navigation("/auth");
       }
     });

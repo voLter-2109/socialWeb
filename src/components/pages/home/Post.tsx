@@ -11,39 +11,32 @@ import {
   ImageListItem,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { collection, getDocs, onSnapshot, doc } from "firebase/firestore";
+import {
+  DocumentData,
+  QuerySnapshot,
+  collection,
+  onSnapshot,
+} from "firebase/firestore";
 import { useAuth } from "../../providers/useAuth";
-import { initialPosts } from "./initialPosts";
-import { union, sortBy } from "lodash";
+import { sortBy, reverse } from "lodash";
 
 const Post: React.FC = () => {
-  const [posts, setPosts] = useState<IPost[]>(initialPosts);
-  const { db, reload } = useAuth();
-  // Promise javacript fetch ?
+  const [posts, setPosts] = useState<IPost[]>([]);
+  const { db } = useAuth();
   useEffect(() => {
-    const unsub = new Promise((resolve, reject) => {
-      onSnapshot(collection(db, "post"), (doc: any) => {
-        resolve(doc);
-        console.log("3")
-      });
-    });
+    let unsub = onSnapshot(
+      collection(db, "post"),
+      (doc: QuerySnapshot<DocumentData>) => {
+        const test: IPost[] = [];
+        doc.forEach((post: any) => {
+          test.push(post.data());
+        });
+        setPosts(reverse(sortBy(test, [(item) => item.createAt])));
+      }
+    );
 
     return () => {
-      unsub
-        .then((res: any) => {
-          console.log("1" + res);
-          const test: any[] = [];
-          res.forEach((post: any) => {
-            test.push(post.data());
-          });
-          return test;
-        })
-        .then((res: any) => {
-          console.log("2" + res);
-          setPosts(() =>
-            sortBy(union([...res, ...posts]), [(item) => item.createAt])
-          );
-        });
+      unsub();
     };
   }, [db]);
 
@@ -88,11 +81,13 @@ const Post: React.FC = () => {
                 </ListItemButton>
               </ListItem>
             </Link>
+
             <ListItemText primary={post.content} />
-            {post.image?.length && (
+
+            {post.image && (
               <ImageList variant="masonry" cols={3} gap={8}>
-                {post.image.map((image) => (
-                  <ImageListItem key={`PostImg-${image}`}>
+                {post.image.map((image, i) => (
+                  <ImageListItem key={`PostImg-${image}+${i}`}>
                     <img
                       src={`${image}`}
                       srcSet={`${image}`}

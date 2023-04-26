@@ -1,9 +1,11 @@
-import Auth from "../pages/auth/Auth";
-import Friends from "../pages/friends/Friends";
-import Home from "../pages/home/Home";
-import Conversation from "../pages/messages/Conversation";
-import Message from "../pages/messages/Messages";
-import Profile from "../pages/profile/Profile";
+import React from "react";
+
+const Home = React.lazy(() => import("../pages/home/Home"));
+const Auth = React.lazy(() => import("../pages/auth/Auth"));
+const Friends = React.lazy(() => import("../pages/friends/Friends"));
+const Conversation = React.lazy(() => import("../pages/messages/Conversation"));
+const Message = React.lazy(() => import("../pages/messages/Messages"));
+const Profile = React.lazy(() => import("../pages/profile/Profile"));
 
 export const routes = [
   {
@@ -35,9 +37,9 @@ export const routes = [
     auth: true,
   },
 
-  {
-    path: "/auth",
-    component: Auth,
-    auth: false,
-  },
+  // {
+  //   path: "/auth",
+  //   component: Auth,
+  //   auth: false,
+  // },
 ];

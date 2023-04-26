@@ -12,10 +12,11 @@ export interface IUser {
 }
 
 export interface IPost {
+  id: string;
   author: IUser;
-  createAt: string;
+  createAt: number;
   content: string;
-  image?: string[];
+  image: string[];
 }
 
 export interface IMenuItem {
@@ -35,4 +36,5 @@ export interface IUserData {
 export interface IMessage {
   user: IUser;
   message: string;
+  createAt: number;
 }

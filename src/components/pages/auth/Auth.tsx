@@ -3,6 +3,7 @@ import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import React, { useEffect, useState } from "react";
 import { IUserData } from "../../../type";
+import "animate.css";
 
 import {
   createUserWithEmailAndPassword,
@@ -37,14 +38,14 @@ const Auth: React.FC = () => {
         await updateProfile(res.user, {
           displayName: userData.name,
         });
-      } catch (error: any) {
+      } catch (error) {
         const result = (error as Error).message;
         setErrorMes(result);
       }
     } else {
       try {
         await signInWithEmailAndPassword(ga, userData.email, userData.password);
-      } catch (error: any) {
+      } catch (error) {
         const result = (error as Error).message;
         setErrorMes(result);
       }
@@ -58,6 +59,8 @@ const Auth: React.FC = () => {
     if (user) navigation("/");
   }, [user]);
 
+  const [test, setTest] = useState(false);
+
   return (
     <>
       <Box
@@ -65,6 +68,8 @@ const Auth: React.FC = () => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center",
+          minHeight: "100vh",
         }}
         component="form"
         onSubmit={handleLogin}
@@ -112,6 +117,23 @@ const Auth: React.FC = () => {
             Registration
           </Button>
         </ButtonGroup>
+
+        <div
+          style={{ width: "50px", height: "50px", border: "1px solid red" }}
+        ></div>
+        <div
+          className={(test ? "animate__bounceInUp" : "") + `animate__animated`}
+          style={{
+            width: "50px",
+            height: "50px",
+            border: "1px solid red",
+          }}
+        ></div>
+        <button type="button" onClick={() => {
+          console.log(test)
+          setTest((prev) => !prev)}}>
+          click
+        </button>
       </Box>
 
       {isRegForm && (

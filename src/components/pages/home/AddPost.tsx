@@ -5,6 +5,7 @@ import { collection, addDoc } from "firebase/firestore";
 
 const AddPost: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
+  const [inputValueImg, setInputValueImg] = useState<string[]>([]);
   const { user, db, setReload } = useAuth();
   const [error, setError] = useState("");
 
@@ -16,22 +17,29 @@ const AddPost: React.FC = () => {
         const docRef = await addDoc(collection(db, "post"), {
           author: user,
           content: inputValue,
-          createAt: String(new Date()),
+          createAt: new Date().getTime(),
+          image: inputValueImg,
         });
-        setReload((prev) => !prev);
+        // setReload((prev) => !prev);
         console.log("Document written with ID: ", docRef.id);
-      } catch (e: any) {
+      } catch (e) {
         const result = (e as Error).message;
         setError(result);
       }
 
       setInputValue("");
+      setInputValueImg([]);
     }
   };
   const onChangeInput = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     setInputValue(e.target.value);
+  };
+  const onChangeInputImg = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setInputValueImg([e.target.value]);
   };
   return (
     <Box
@@ -52,6 +60,18 @@ const AddPost: React.FC = () => {
         onKeyDown={(e) => addPostHandler(e)}
         onChange={(e) => onChangeInput(e)}
         value={inputValue}
+      />
+      <TextField
+        id="outlined-basic"
+        label="write url img"
+        variant="outlined"
+        type="text"
+        InputProps={{
+          sx: { borderRadius: "15px" },
+        }}
+        onKeyDown={(e) => addPostHandler(e)}
+        onChange={(e) => onChangeInputImg(e)}
+        value={inputValueImg}
       />
       {error && (
         <Alert severity="error">
